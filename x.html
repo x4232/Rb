@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4232 store</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        padding-top: 120px;
+        background-color: #040c23;
+    }
+    .large-title {
+        font-size: 2em;
+        font-weight: bold;
+        color: #4980f7;
+        margin-top: -10px;
+        text-align: center;
+    }
+    .image-container {
+        margin-top: 10px;
+    }
+    img {
+        max-width: 100%; 
+        height: auto;   
+        width: 50px;
+        height: 50px;
+        border: 2px solid #518afe;
+        border-radius: 50%;
+        margin-right: 10px;
+        margin-bottom: 5px;
+    }
+    .list-group-item {
+        position: relative;
+        padding: 20px;
+        margin: 10px;
+        background-color: #07122f;
+        box-sizing: border-box;
+    }
+    .item-info {
+        display: flex;
+        flex-direction: column;
+    }
+    .at-symbol {
+        color: #adadb8;
+        font-size: 1em;
+    }
+    .text-part {
+        font-size: 1.2em;
+        color: #ffffff;
+        margin-left: 2px;
+    }
+    .user-info {
+        display: flex;
+        align-items: center;
+    }
+    .item-label {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 0 0 0 15px;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+    .item-button {
+        background-color: transparent;
+        border: 2px solid #518afe;
+        color: #518afe;
+        text-align: left;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-top: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s, border-color 0.3s;
+        height: 40px;
+        width: 48%;
+    }
+    .item-button:hover {
+        background-color: #3b65b6;
+        border-color: #3b65b6;
+        color: black;
+    }
+    .button-text-pf, .button-text-sr {
+        position: relative;
+        align-items: center;
+    }
+    .search-sort {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        align-items: center;
+    }
+    .search-sort div {
+        margin: 0;
+    }
+    .search-sort div:first-child {
+        width: 50%;
+        margin-right: auto;
+        margin-left: 10px;
+    }
+    .search-sort div:last-child {
+        width: 15%;
+        margin-left: auto;
+        margin-right: 350px;
+    }
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .horizontal-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+    .list-group-item {
+        width: calc(100% - 20px);
+    }
+    @media (min-width: 768px) {
+        .list-group-item {
+            width: calc(50% - 20px);
+            left: -15px;
+        }
+        .search-sort div:first-child, 
+        .search-sort div:last-child {
+            width: 50%;
+            margin: 0 0 10px 0;
+        }
+    }
+    @media (min-width: 992px) {
+        .list-group-item {
+            width: calc(33.33% - 20px);
+        }
+        .search-sort div:first-child, 
+        .search-sort div:last-child {
+            width: 50%;
+            margin: 0 0 10px 0;
+        }
+        .search-sort div:last-child {
+            margin-left: auto;
+        }
+    }
+    @media (min-width: 1200px) {
+        .list-group-item {
+            width: calc(25% - 20px);
+        }
+    }
+    @media (max-width: 767px) {
+        .search-sort {
+            align-items: flex-start;
+        }
+        .search-sort div:first-child, 
+        .search-sort div:last-child {
+            width: 50%;
+            margin: 0 0 10px 0;
+        }
+        .search-sort div:last-child {
+            margin-left: auto;
+        }
+        .list-group-item {
+            margin-left: -7px;
+        }
+    }
+    .sort-icon, .search-icon {
+        border-radius: 20px;
+        border: none;
+        background-color: transparent;
+        padding-right: 30px;
+        background-repeat: no-repeat;
+        background-position: right 20px center;
+        background-size: 20px 20px;
+        margin-right: 5px;
+        filter: invert(48%) sepia(84%) saturate(567%) hue-rotate(207deg) brightness(93%) contrast(97%);
+    }
+    .sort-icon {
+        background-image: url('https://iconbox.fun/wp/wp-content/uploads/chart_bar3_hoso.svg');
+    }
+    .search-icon {
+        background-image: url('https://iconbox.fun/wp/wp-content/uploads/search_hoso.svg');
+        background-position: right 10px center;
+    }
+    .button-text-sr::after {
+        content: '';
+        position: absolute;
+        right: -25px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        background-image: url('https://iconbox.fun/wp/wp-content/uploads/125_arr_hoso.svg');
+        filter: invert(48%) sepia(84%) saturate(567%) hue-rotate(207deg) brightness(93%) contrast(97%);
+        background-size: cover;
+    }
+    .search-icon:focus, .search-icon:active, 
+    .sort-icon:focus, .sort-icon:active {
+        background-color: transparent;
+    }
+    .fixed-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background-color: #040c23;
+        color: #4980f7;
+        padding: 10px 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: top 0.3s ease;
+        height: 120px;
+    }
+    .search-sort {
+        position: absolute;
+        top: 50px;
+        bottom: 10px;
+        left: 1px;
+        right: 10px;
+    }
+    .fixed-header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .sns-button {
+        display: inline-block;
+        padding: 10px 20px;
+        text-decoration: none;
+        background-color: transparent;
+        border: 2px solid #518afe;
+        color: #518afe;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s, border-color 0.3s;
+        margin-left: 10px;
+    }
+    .sns-button:hover {
+        background-color: #518afe;
+        border-color: #3b65b6;
+        color: black;
+    }
+    .right-buttons {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .promo-banner {
+        text-align: center;
+        padding: 10px;
+        background: linear-gradient(to right, #ff00d0, #f06fd4);
+        color: white;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .promo-banner.hidden {
+        display: none;
+    }
+
+    .promo-banner p {
+        margin: 0;
+        white-space: nowrap;
+        display: inline-block;
+        position: relative;
+        animation: none;
+    }
+
+    .promo-banner.animate p {
+        animation: marquee 12s linear infinite;
+    }
+    @keyframes marquee {
+        0% { transform: translateX(50%); }
+        100% { transform: translateX(-100%); }
+    }
+</style>
+</head>
+<body>
+    <header class="fixed-header">
+        <div class="container">
+            <div class="large-title">4232</div>
+            <div class="right-buttons">
+                <a href="https://x.com/@4232" class="sns-button" target="_blank">購入/連絡先</a>
+                <a href="https://x4232.github.io/Rb/xTOS.html" class="sns-button" target="_blank">利用規約</a>
+            </div>
+            <div class="search-sort">
+                <div class="form-group">
+                    <input type="text" id="searchInput" class="form-control search-icon" placeholder="検索..." />
+                </div>
+                <div class="form-group">
+                    <select id="sortSelect" class="form-control sort-icon">
+                        <option value="default">おすすめ</option>
+                        <option value="amountLow">価格の安い順</option>
+                        <option value="amountHigh">価格の高い順</option>
+                        <option value="az">A-z</option>
+                        <option value="za">z-A</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="promo-banner">
+        <p></p>
+    </div>
+    <ul id="fileContent" class="horizontal-list"></ul>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+const githubAdFileUrl = 'https://raw.githubusercontent.com/x4232/Rb/refs/heads/main/ad.txt';
+const githubFileUrl = 'https://raw.githubusercontent.com/x4232/Rb/refs/heads/main/Sr.txt';
+let originalData = [];
+let exchangeRate = 1;
+
+function fetchExchangeRate() {
+    return axios.get('https://api.exchangerate-api.com/v4/latest/USD')
+        .then(response => {
+            exchangeRate = response.data.rates.JPY;
+            console.log('為替レート JPY/USD:', exchangeRate);
+            updateList();
+        })
+}
+
+function loadAndDisplayFile() {
+    fetchExchangeRate().then(() => {
+        fetch(githubFileUrl)
+            .then(response => {
+                if (!response.ok) throw new Error('ファイルが見つかりません');
+                return response.text();
+            })
+            .then(data => {
+                const lines = data.split('\n');
+                originalData = lines.map(line => {
+                    const parts = line.split('+');
+                    const usdPrice = parseFloat(parts[2] || 0);
+                    let jpyPrice = Math.ceil(usdPrice * exchangeRate / 100) * 100;                   
+                    const formattedPrice = jpyPrice.toLocaleString('ja-JP', {maximumFractionDigits: 0});
+                    return {
+                        text: parts[0],
+                        number: parts[1],
+                        label: jpyPrice > 0 ? `¥${formattedPrice}` : 'offer',
+                        usdPrice: usdPrice
+                    };
+                });
+                originalData.sort((a, b) => {
+                    if (a.usdPrice === 0 && b.usdPrice === 0) return 0;
+                    if (a.usdPrice === 0) return 1;
+                    if (b.usdPrice === 0) return -1;
+                    return a.usdPrice - b.usdPrice;
+                });
+                updateList();
+            })
+    });
+}
+
+function updateList() {
+     window.scrollTo({top: 0,behavior: 'smooth'});
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    const sortSelect = document.getElementById('sortSelect').value;
+    let filteredData = originalData.filter(item => item.text.toLowerCase().includes(searchInput));
+    let sortFunction;
+    let sortByNumberAZ = (a, b) => {
+        const assignSortNumber = (item) => {
+            let text = item.text.toLowerCase();
+            if (/^\d{4}/.test(text)) return parseInt(text.substr(0, 4));
+            if (text.startsWith('_')) return 10000 + text.charCodeAt(1);
+            if (!isNaN(parseInt(text[0]))) return 20000 + parseInt(text[0]);
+            let charCode = text.charCodeAt(0);
+            return charCode >= 97 && charCode <= 122 ? 30000 + charCode : 40000;
+        };
+        let numA = assignSortNumber(a);
+        let numB = assignSortNumber(b);
+        return numA - numB;
+    };
+    let sortByNumberZA = (a, b) => {
+        const assignSortNumber = (item) => {
+            let text = item.text.toLowerCase();
+            if (/^\d{4}/.test(text)) return parseInt(text.substr(0, 4));
+            if (text.startsWith('_')) return 10000 + text.charCodeAt(1);
+            if (!isNaN(parseInt(text[0]))) return 20000 + parseInt(text[0]);
+            let charCode = text.charCodeAt(0);
+            return charCode >= 97 && charCode <= 122 ? 65535 - charCode : 40000;
+        };
+        let numA = assignSortNumber(a);
+        let numB = assignSortNumber(b);
+        return numB - numA;
+    };
+    switch(sortSelect) {
+        case 'amountLow':
+            filteredData.sort((a, b) => {
+                if (a.usdPrice === 0 && b.usdPrice === 0) return 0;
+                if (a.usdPrice === 0) return 1;
+                if (b.usdPrice === 0) return -1;
+                return a.usdPrice - b.usdPrice;
+            });
+            break;
+        case 'amountHigh':
+            filteredData.sort((a, b) => {
+                if (a.usdPrice === 0 && b.usdPrice === 0) return 0;
+                if (a.usdPrice === 0) return 1;
+                if (b.usdPrice === 0) return -1;
+                return b.usdPrice - a.usdPrice;
+            });
+            break;
+        case 'az':
+        filteredData.sort(sortByNumberAZ);
+            break;
+        case 'za':
+        sortFunction = (a, b) => b.text.localeCompare(a.text);
+            break;
+        default:
+            filteredData = shuffleArray([...filteredData]);
+            sortFunction = null;
+    }
+    if (sortFunction) {
+        filteredData.sort(sortFunction);
+    }
+    const list = document.getElementById('fileContent');
+    list.innerHTML = '';
+    filteredData.forEach(item => {
+        let li = document.createElement('li');
+        li.className = 'list-group-item';
+        let imgContainer = document.createElement('div');
+        let img = document.createElement('img');
+        let cleanedNumberPart = item.number.trim().toLowerCase();
+        switch(cleanedNumberPart) {
+            case '0': img.src = 'https://raw.githubusercontent.com/x4232/Rb/refs/heads/main/0.jpg'; break;
+            case '1': img.src = 'https://raw.githubusercontent.com/x4232/Rb/refs/heads/main/1.jpg'; break;
+            case '2': img.src = 'https://raw.githubusercontent.com/x4232/Rb/refs/heads/main/2.png'; break;
+            case '3': img.src = 'https://raw.githubusercontent.com/x4232/Rb/refs/heads/main/3.jpg'; break;
+            case '4': img.src = 'https://raw.githubusercontent.com/x4232/Rb/refs/heads/main/4.jpg'; break;
+            case '5': img.src = 'https://raw.githubusercontent.com/x4232/Rb/refs/heads/main/5.jpg'; break;
+            case '6': img.src = 'https://raw.githubusercontent.com/x4232/Rb/refs/heads/main/6.jpg'; break;
+            default: img.src = ''; 
+        }
+        img.alt = 'Image for ' + item.text;
+        imgContainer.appendChild(img);
+        li.appendChild(imgContainer);
+        let infoContainer = document.createElement('div');
+        infoContainer.className = 'item-info';
+        let userInfo = document.createElement('div');
+        userInfo.className = 'user-info';
+        let atSymbol = document.createElement('span');
+        atSymbol.className = 'at-symbol';
+        atSymbol.textContent = '@';
+        let textSpan = document.createElement('span');
+        textSpan.className = 'text-part'; 
+        textSpan.textContent = item.text.trim(); 
+        userInfo.appendChild(atSymbol);
+        userInfo.appendChild(textSpan);
+        infoContainer.appendChild(userInfo);
+        let buttonContainer = document.createElement('div');
+        buttonContainer.className = 'button-container';
+        let profileButton = document.createElement('button');
+        profileButton.className = 'item-button';
+        profileButton.setAttribute('data-textpart', item.text.trim());
+        profileButton.onclick = function() {
+            window.location.href = `https://x.com/${this.getAttribute('data-textpart')}`;
+        };
+        let profileButtonText = document.createElement('span');
+        profileButtonText.className = 'button-text-pf';
+        profileButtonText.textContent = 'プロフィール';
+        profileButton.appendChild(profileButtonText);
+        buttonContainer.appendChild(profileButton);
+        let shareButton = document.createElement('button');
+        shareButton.className = 'item-button';
+        shareButton.setAttribute('data-textpart', '@' + item.text.trim());
+        let url = `https://twitter.com/intent/tweet?text=Twitter%204%E6%96%87%E5%AD%97ID%E3%82%92%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%81%97%E3%82%88%E3%81%86%EF%BC%81%0A${encodeURIComponent(shareButton.getAttribute('data-textpart'))}%E3%82%92%E5%85%B1%E6%9C%89%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81%0Ahttps%3A%2F%2Fx4232.github.io%2FRb%2Fx.html%20%404232`;
+        shareButton.onclick = function() {
+            window.open(url, '_blank');
+        };
+        let shareButtonText = document.createElement('span');
+        shareButtonText.className = 'button-text-sr';
+        shareButtonText.textContent = 'シェアする';
+        shareButton.appendChild(shareButtonText);
+        buttonContainer.appendChild(shareButton);
+        infoContainer.appendChild(buttonContainer);
+        li.appendChild(infoContainer);
+        if (item.label) {
+            let label = document.createElement('span');
+            label.className = 'item-label';
+            label.textContent = item.label;
+            li.appendChild(label);
+        }
+        list.appendChild(li);
+    });
+}
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+function fetchAdContent() {
+    fetch(githubAdFileUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('ファイルが見つかりません');
+            }
+            return response.text();
+        })
+        .then(content => {
+            if (content.trim() === '') {
+                throw new Error('内容が空です');
+            }
+            const bannerElement = document.querySelector('.promo-banner');
+            bannerElement.querySelector('p').textContent = content;
+            bannerElement.classList.remove('hidden');
+            bannerElement.classList.add('animate');
+        })
+        .catch(error => {
+            console.error('エラー:', error.message);
+            const bannerElement = document.querySelector('.promo-banner');
+            bannerElement.classList.add('hidden');
+        });
+    const bannerElement = document.querySelector('.promo-banner');
+    bannerElement.querySelector('p').textContent = "";
+    bannerElement.classList.remove('hidden');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetchAdContent();
+    loadAndDisplayFile();
+
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const input = e.target;
+        if (!input.value.match(/^[a-zA-Z0-9_]*$/)) {
+            input.value = input.value.replace(/[^a-zA-Z0-9_]/g, '');
+        }
+        updateList();
+    });
+    document.getElementById('sortSelect').addEventListener('change', updateList);
+    setInterval(fetchExchangeRate, 300000);
+    const header = document.querySelector('.fixed-header');
+    let lastScrollTop = 0;
+    let scrollCounter = 0;
+    let lastScrollTime = Date.now();
+
+    window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        let currentTime = Date.now();
+        
+        if (scrollTop > lastScrollTop) {
+            scrollCounter++;
+            if (scrollCounter >= 20 || currentTime - lastScrollTime > 30000) {
+                header.style.top = '-120px'; 
+            }
+        } else {
+            scrollCounter = 0;
+            header.style.top = '0';
+        }
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+        lastScrollTime = currentTime;
+    });
+});
+    </script>
+</body>
+</html>
