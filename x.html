@@ -275,7 +275,100 @@
         0% { transform: translateX(50%); }
         100% { transform: translateX(-100%); }
     }
-</style>
+    
+    .overlay-banner {
+        position: fixed;
+        top: 250px;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1001;
+        margin-left: 500px;
+        margin-right: 500px;
+        margin-bottom: -100px;
+        height: 450px;
+    }
+
+    .promo-image-container {
+        max-width: calc(100vw - 20px);
+        max-height: calc(100vh - 140px);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .promo-image-container img {
+        max-width: 90%;
+        max-height: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: auto !important;
+        height: auto !important;
+        border: none !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+    }
+
+    .overlay-banner.hidden {
+        display: none;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #fff;
+        z-index: 1002;
+    }
+
+    .close-btn:hover {
+        color: #ddd;
+    }
+
+    @media (max-width: 767px) {
+        .overlay-banner {
+            top: 180px;
+            margin-left: 20px;
+            margin-right: 20px;
+            height: 225px;
+            width: auto;
+        }
+
+        .promo-image-container {
+            max-width: calc(100vw - 40px);
+            max-height: calc(100vh - 200px);
+            margin-top: 32px;
+        }
+
+        .promo-image-container img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    }
+
+    @media (min-width: 768px) and (max-width: 991px) {
+        .overlay-banner {
+            top: 200px;
+            margin-left: 100px;
+            margin-right: 100px;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .overlay-banner {
+            top: 250px;
+            margin-left: 500px;
+            margin-right: 500px;
+            height: 450px;
+        }
+    }
+    </style>
 </head>
 <body>
     <header class="fixed-header">
@@ -301,6 +394,12 @@
             </div>
         </div>
     </header>
+    
+    <div class="overlay-banner hidden" id="overlayBanner">
+        <span class="close-btn" onclick="closeBanner()">×</span>
+        <div class="promo-image-container"></div>
+    </div>
+
     <div class="promo-banner">
         <p></p>
     </div>
@@ -403,10 +502,10 @@ function updateList() {
             });
             break;
         case 'az':
-        filteredData.sort(sortByNumberAZ);
+            filteredData.sort(sortByNumberAZ);
             break;
         case 'za':
-        sortFunction = (a, b) => b.text.localeCompare(a.text);
+            sortFunction = (a, b) => b.text.localeCompare(a.text);
             break;
         default:
             filteredData = shuffleArray([...filteredData]);
@@ -485,6 +584,7 @@ function updateList() {
         list.appendChild(li);
     });
 }
+
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -520,9 +620,44 @@ function fetchAdContent() {
     bannerElement.classList.remove('hidden');
 }
 
+function loadPromoImage() {
+    const imageUrl = 'https://raw.githubusercontent.com/x4232/Rb/refs/heads/main/present.png';
+    const banner = document.getElementById('overlayBanner');
+    const container = banner.querySelector('.promo-image-container');
+    
+    fetch(imageUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('画像が見つかりません');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(blob);
+            img.onload = function() {
+                const width = this.width + 10;
+                const height = this.height + 10;
+                container.style.width = `${width}px`;
+                container.style.height = `${height}px`;
+                container.appendChild(this);
+                banner.classList.remove('hidden');
+            };
+        })
+        .catch(error => {
+            console.error('エラー:', error.message);
+            banner.classList.add('hidden');
+        });
+}
+
+function closeBanner() {
+    document.getElementById('overlayBanner').classList.add('hidden');
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     fetchAdContent();
     loadAndDisplayFile();
+    loadPromoImage();
 
     document.getElementById('searchInput').addEventListener('input', function(e) {
         const input = e.target;
