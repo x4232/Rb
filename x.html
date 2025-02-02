@@ -563,8 +563,9 @@ function updateList() {
         buttonContainer.appendChild(profileButton);
         let shareButton = document.createElement('button');
         shareButton.className = 'item-button';
-        shareButton.setAttribute('data-textpart', '@' + item.text.trim());
-        let url = `https://twitter.com/intent/tweet?text=Twitter%204%E6%96%87%E5%AD%97ID%E3%82%92%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%81%97%E3%82%88%E3%81%86%EF%BC%81%0A${encodeURIComponent(shareButton.getAttribute('data-textpart'))}%E3%82%92%E5%85%B1%E6%9C%89%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81%0Ahttps%3A%2F%2Fx4232.github.io%2FRb%2Fx.html%20%404232`;
+        shareButton.setAttribute('data-textpart', '@' + item.text.trim()
+        const hashtags = '%23%E5%9B%9B%E6%96%87%E5%AD%97ID%20%23%E5%9B%9B%E6%96%87%E5%AD%97%20%23%E3%82%8F%E3%82%89%E3%81%97%E3%81%B9';
+        let url = `https://twitter.com/intent/tweet?text=Twitter%204%E6%96%87%E5%AD%97ID%E3%82%92%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%81%97%E3%82%88%E3%81%86%EF%BC%81%0A${encodeURIComponent(shareButton.getAttribute('data-textpart'))}%E3%82%92%E5%85%B1%E6%9C%89%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%EF%BC%81%0Ahttps%3A%2F%2Fx4232.github.io%2FRb%2Fx.html%20%404232%0A${hashtags}`;
         shareButton.onclick = function() {
             window.open(url, '_blank');
         };
@@ -584,7 +585,6 @@ function updateList() {
         list.appendChild(li);
     });
 }
-
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -592,7 +592,6 @@ function shuffleArray(array) {
     }
     return array;
 }
-
 function fetchAdContent() {
     fetch(githubAdFileUrl)
         .then(response => {
@@ -619,12 +618,10 @@ function fetchAdContent() {
     bannerElement.querySelector('p').textContent = "";
     bannerElement.classList.remove('hidden');
 }
-
 function loadPromoImage() {
     const imageUrl = 'https://raw.githubusercontent.com/x4232/Rb/refs/heads/main/present.png';
     const banner = document.getElementById('overlayBanner');
     const container = banner.querySelector('.promo-image-container');
-    
     fetch(imageUrl)
         .then(response => {
             if (!response.ok) {
